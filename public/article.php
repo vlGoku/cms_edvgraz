@@ -8,13 +8,6 @@ if( ! $cat_id ) {
 }
 
 
-/* $sql = "SELECT id, name, description FROM category WHERE id = :id;";
-$category = pdo_execute( $pdo, $sql, ['id' => $cat_id ] )->fetch();
-
-if ( ! $category ) {
-    include 'page_not_found.php';
-} */
-
 $sql = "SELECT a.title, a.summary, a.content, a.created, a.category_id, a.user_id, c.name AS category,
         CONCAT(u.forename, ' ', u.surname) as author, i.filename as image_file, i.alttext as image_alt
         FROM articles as a

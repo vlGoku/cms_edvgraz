@@ -1,12 +1,21 @@
 <?php
-require '../includes/functions.php';
-require '../includes/db-connect.php';
+require '../../src/bootstrap.php';
 
-$error = filter_input(INPUT_GET, 'error') ?? '';
-$success = filter_input(INPUT_GET, 'success') ?? '';
+$cat_id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+if ( ! $cat_id ) {
+    include APP_ROOT . '/public/page_not_found.php';
+}
 
-$sql = "SELECT id, name, navigation FROM category";
-$categories = pdo_execute( $pdo, $sql )->fetchAll(PDO::FETCH_ASSOC);
+$category = $cms->getCategory()->fetch($cat_id);
+if ( ! $category ) {
+    include APP_ROOT . '/public/page_not_found.php';
+}
+
+$articles = $cms->getArticle()->getAll( $cat_id );
+$navigation = $cms->getCategory()->fetchNavigation();
+$title = $category['name'];
+$description = $category['description'];
+$section = $cat_id;
 ?>
 
 <?php include '../includes/header-admin.php' ?>

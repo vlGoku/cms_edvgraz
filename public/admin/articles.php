@@ -1,19 +1,21 @@
 <?php
-require '../includes/functions.php';
-require '../includes/db-connect.php';
+require '../../src/bootstrap.php';
 
-$error = filter_input(INPUT_GET, 'error') ?? '';
-$success = filter_input(INPUT_GET, 'success') ?? '';
+$art_id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+if ( ! $art_id ) {
+    include APP_ROOT . '/public/page_not_found.php';
+}
 
-//$sql = "SELECT id, name, navigation FROM category";
-$sql = "SELECT a.id, a.title, a.summary, a.created, a.published, a.category_id, a.user_id, c.name AS category,
-        CONCAT(u.forename, ' ', u.surname) as author, i.filename as image_file, i.alttext as image_alt
-        FROM articles as a
-        JOIN category as c ON a.category_id = c.id
-        JOIN user as u ON a.user_id = u.id
-        LEFT JOIN images as i ON a.images_id = i.id
-        ORDER BY a.id DESC";
-$articles = pdo_execute( $pdo, $sql )->fetchAll(PDO::FETCH_ASSOC);
+$articles = $cms->getArticle()->fetch($art_id);
+if ( ! $articles ) {
+    include APP_ROOT . '/public/page_not_found.php';
+}
+
+$articles = $cms->getArticle()->getAll( $cat_id );
+$navigation = $cms->getCategory()->fetchNavigation();
+$title = $category['name'];
+$description = $category['description'];
+$section = $cat_id;
 ?>
 
 <?php include '../includes/header-admin.php' ?>
@@ -43,8 +45,6 @@ $articles = pdo_execute( $pdo, $sql )->fetchAll(PDO::FETCH_ASSOC);
         <tbody>
         <?php foreach ( $articles as $article ) : ?>
             <?php
-/*             var_dump($article['image_file']);
-            exit; */
             ?>
             <tr class="bg-white border-b dark:bg-gray-800">
                 <td class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"><img src="../uploads/<?php echo e ($article['image_file']) ?>" alt="<?php $article['image_alt']?>"></td>
