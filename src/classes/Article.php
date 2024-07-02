@@ -25,7 +25,7 @@ class Article {
     }
 
     public function getAll(int $cat_id = null, bool $published = true, int $user_id = null, int $limit = 1000): array {
-        $sql = "SELECT a.id, a.title, a.summary, a.category_id, a.user_id, a.published, c.name AS category,
+        $sql = "SELECT a.id, a.title, a.summary, a.category_id, a.user_id, a.published, a.created, c.name AS category,
                 CONCAT(u.forename, ' ', u.surname) as author,
                 i.filename as image_file, i.alttext as image_alt
                 FROM articles as a
