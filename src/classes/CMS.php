@@ -7,7 +7,7 @@ class CMS {
     protected User $user;
 
     public function __construct(string $dsn, string $user_name, string $password) {
-        $this->db = new Databse ( $dsn, $user_name, $password );
+        $this->db = new Database ( $dsn, $user_name, $password );
     }
 
     public function getArticle(): Article {
