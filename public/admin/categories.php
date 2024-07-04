@@ -6,15 +6,16 @@ if ( ! $cat_id ) {
     include APP_ROOT . '/public/page_not_found.php';
 }
 
-$category = $cms->getCategory()->fetch($cat_id);
-if ( ! $category ) {
+$categories = $cms->getCategory()->getAll();
+if ( ! $categories ) {
     include APP_ROOT . '/public/page_not_found.php';
 }
 
+$error = filter_input(INPUT_GET, 'error') ?? '';
+$success = filter_input(INPUT_GET, 'success') ?? '';
+
 $articles = $cms->getArticle()->getAll( $cat_id );
 $navigation = $cms->getCategory()->fetchNavigation();
-$title = $category['name'];
-$description = $category['description'];
 $section = $cat_id;
 ?>
 
