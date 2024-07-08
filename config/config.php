@@ -16,3 +16,13 @@ const MEDIA_TYPES = ['image/jpeg', 'image/png'];
 const FILE_EXTENSIONS = ['jpg', 'jpeg', 'png'];
 const MAX_FILE_SIZE = 1024 * 1024 * 2;
 define ("UPLOAD_DIR", dirname(__DIR__, 1) . DIRECTORY_SEPARATOR . ROOT_FOLDER . DIRECTORY_SEPARATOR . '/uploads/');
+
+$mail_config = [
+    'host' => 'smtp-mail.outlook.com',
+    'port' => 587,
+    'username' => 'marko21ps4@outlook.de',
+    'password' => 'Okram109',
+    'sec' => 'tls',
+    'admin_mail' => 'marko21ps4@outlook.de',
+    'debug' => (DEV_MODE ? 2 : 0)
+];

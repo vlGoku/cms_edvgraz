@@ -1,20 +1,34 @@
 <?php
-require '../includes/functions.php';
-require '../includes/db-connect.php';
+require '../../src/bootstrap.php';
 
-$cat_id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT) ?? null;
-$is_delete = filter_input(INPUT_GET, 'delete', FILTER_VALIDATE_INT) ?? null;
-$sql = "DELETE FROM category WHERE id = $cat_id";
-if($is_delete === 1) {
-    try {
-        $delete = pdo_execute($pdo, $sql);
-        redirect('categories.php', ['success' => 'category successfully deleted'] );
-    } catch ( PDOException $e ){
-        redirect('categories.php', ['error' => 'category could not be deleted'] );
+$id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT) ?? null;
+$errors = [
+    'issue' => '',
+    'content' => ''
+];
+$category = '';
+
+if($id){  
+    $category = $cms->getCategory()->fetch($id);
+    if(! $category){
+        redirect('categories.php', ['error' => 'category not found']);
     }
 }
-?>
+if($_SERVER['REQUEST_METHOD'] === 'POST'){
+    $categoryId = filter_input(INPUT_POST, 'id', FILTER_VALIDATE_INT);
+    $articleCount = $cms->getArticle()->countArticlesInCategory($categoryId);
+    if ($articleCount > 0) {
+        $errors['content'] = 'Category ' . $category['name'] . ' cannot be removed, there are articles in the category.';
+    } else {
+        $cms->getCategory()->delete($categoryId);
+        redirect('categories.php', ['success' => 'Category successfully deleted']);
+    }
 
-<?php include '../includes/header-admin.php'; ?>
+}
 
-<?php include '../includes/footer.php'; ?>
+$data['category'] = $category;
+$data['errors'] = $errors;
+
+echo $twig->render('admin/category-delete.html', $data);
+
+

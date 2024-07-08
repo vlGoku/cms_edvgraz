@@ -1,32 +1,36 @@
 <?php
-require '../includes/functions.php';
-require '../includes/db-connect.php';
+require '../../src/bootstrap.php';
 
-$article_id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT) ?? null;
-$is_delete = filter_input(INPUT_GET, 'delete', FILTER_VALIDATE_INT) ?? null;
-$sql = "SELECT id, title, created, category_id, user_id, images_id, published FROM articles WHERE id = $article_id";
-$article = pdo_execute($pdo, $sql)->fetch(PDO::FETCH_ASSOC);
-if($is_delete === 1) {
-    if($article['images_id']){
-        $images_id = $article['images_id'];
-        $sql = "SELECT filename FROM images WHERE id = $images_id";
-        $image = pdo_execute($pdo, $sql)->fetch(PDO::FETCH_ASSOC);
-        $sql = "UPDATE articles SET images_id = NULL WHERE id = $article_id";
-        $image_to_be_null = pdo_execute($pdo, $sql);
-        $sql = "DELETE FROM images WHERE id = $images_id";
-        $iamge_to_be_deleted = pdo_execute($pdo, $sql);
-        unlink("../uploads/" . $image['filename']);
-    }
-    try {
-        $sql = "DELETE FROM articles WHERE id = $article_id"; 
-        $delete = pdo_execute($pdo, $sql);
-        redirect('articles.php', ['success' => 'article successfully deleted'] );
-    } catch ( PDOException $e ){
-        redirect('articles.php', ['error' => 'article could not be deleted'] );
+$id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT) ?? null;
+$errors = [
+    'issue' => '',
+    'content' => ''
+];
+if($id){
+    $article = $cms->getArticle()->fetch($id)[0];
+    if(! $article){
+        redirect('articles.php', ['error' => 'article not found']);
     }
 }
-?>
 
-<?php include '../includes/header-admin.php'; ?>
+if($_SERVER['REQUEST_METHOD'] === 'POST'){
 
-<?php include '../includes/footer.php'; ?>
+    $id = filter_input(INPUT_POST, 'id', FILTER_VALIDATE_INT);
+    if($article['image_id'] !== null){
+        $image_id = $article['image_id'];
+        
+        $article['image_id'] = null;
+        $cms->getArticle()->update($article);
+        
+        $cms->getImage()->delete($image_id);
+        unlink(UPLOAD_DIR .  $article['image_file']);
+    }
+    $cms->getArticle()->delete($id);
+
+    redirect('articles.php', ['success' => 'Article successfully deleted']);
+}
+
+$data['article'] = $article;
+$data['errors'] = $errors;
+
+echo $twig->render('admin/article-delete.html', $data);

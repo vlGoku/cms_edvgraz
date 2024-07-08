@@ -1,18 +1,10 @@
 <?php
-require '../includes/functions.php';
-require '../includes/db-connect.php';
-require '../includes/validate.php';
-
+require '../../src/bootstrap.php';
 use EdvGraz\Validation\Validate;
 
-//Variablen initialisieren für Bildupload
-$path_to_img = '/uploads/';
-$allowed_types = [ 'image/jpeg', 'image/png'];
-$allowed_ext = ['jpg', 'jpeg', 'png'];
-$max_size = 1080 * 1920 * 2;
 
 $id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT) ?? '';
-$tmp_path = $_FILES['filename']['tmp_name'] ?? '';
+$tmp_path = $_FILES['image_file']['tmp_name'] ?? '';
 $save_to = '';
 
 $article = [
@@ -20,14 +12,13 @@ $article = [
     'title' => '',
     'summary' => '',
     'content' => '',
-    'published' => false,
+    'published' => '',
     'category_id' => 0,
     'user_id' => 0,
     'images_id' => null,
-    'filename' => '',
-    'alttext' => '',
+    'image_file' => '',
+    'image_alt' => '',
 ];
-
 $errors = [
     'issue' => '',
     'title' => '',
@@ -35,56 +26,43 @@ $errors = [
     'content' => '',
     'user' => '',
     'category' => '',
-    'filename' => '',
-    'alttext' => '',
+    'image_file' => '',
+    'image_alt' => '',
 ];
 
-// Lade alle Kategorien von der Datenbank
-$sql = "SELECT id, name FROM category";
-$categories = pdo_execute( $pdo, $sql)->fetchAll(PDO::FETCH_ASSOC);
-$sql = "SELECT id, forename, surname FROM user";
-$users = pdo_execute( $pdo, $sql )->fetchAll(PDO::FETCH_ASSOC);
 
-if ( $id ) {
-    $sql = "SELECT a.id, a.title, a.summary, a.content, a.category_id,
-            a.user_id, a.images_id, a.published,
-            i.filename, i.alttext FROM articles a
-            LEFT JOIN images i ON a.images_id = i.id
-            WHERE a.id = :id";
-    $article = pdo_execute( $pdo, $sql, ['id' => $id] )->fetch(PDO::FETCH_ASSOC);
-    if ( ! $article ) {
-        redirect('articles.php', ['error' => 'article not found'] );
+$categories = $cms->getCategory()->fetchAll();
+$users = $cms->getUser()->fetchAll();
+if($id){
+    $article = $cms->getArticle()->fetch($id)[0];
+    if(! $article){
+        redirect('articles.php', ['error' => 'article not found']);
     }
 }
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    //Bild auslesen
-    if ( isset( $_FILES['filename'] ) ) {
-        $image = $_FILES['filename'];
-        //Bildgröße validieren
-        $errors['filename'] = $image['error'] === 1 ? 'The image is to large ' : '';
-        // Wenn ein Bild hochgeladen wurde, dann wird es validiert
-        if ($tmp_path && $image['error'] === UPLOAD_ERR_OK ) {
-            // Alt-Text wird gesetzt 
-            $article['alttext'] = filter_input(INPUT_POST, 'alttext');
-            //Alt-Text validieren
-            $errors['alttext'] = is_text($article['alttext'], 1, 254) ? '' : 'Alt text must be between 1 and 254 characters';
-            //Bildtyp wird validiert
+if($_SERVER['REQUEST_METHOD'] === 'POST'){
+    if(isset($_FILES['image_file'])){
+        $image = $_FILES['image_file'];
+        $errors['image_file'] = $image['error'] === 1 ? 'The image is too large' : '';
+        if($tmp_path && $image['error'] === UPLOAD_ERR_OK){
+            $article['image_alt'] = filter_input(INPUT_POST, 'image_alt');
+            $errors['image_alt'] = Validate::is_text($article['image_alt'], 1, 254) ? '' : 'Alt text must be between 1 and 254 characters';
+            
             $typ = mime_content_type($tmp_path);
-            $errors['filename'] .= in_array($typ, $allowed_types) ? '' : 'The file type is not allowed';
-            //Bildendung wird validiert
-            $extension = pathinfo(strtolower($image['name'] ), PATHINFO_EXTENSION);
-            $errors['filename'] .= in_array($extension, $allowed_ext) ? '' : 'The file extension is not allowed';
-            //Bildgröße wird validiert
-            $errors['filename'] .= $image['size'] > $max_size ? 'The image exceeds the maximum opload size' : '';
-            //Wenn es keine Fehler gibt, wird ein Speicherort für das Bild festegelegt
-            if( $errors['filename'] === '' && $errors['alttext'] === '' ){
-                $article['filename'] = $image['name'];
-                $save_to = get_file_path($image['name'], $path_to_img);
+            $errors['image_file'] .= in_array($typ, MEDIA_TYPES) ? '' : 'The file type is not allowed';
+            
+            $extension = pathinfo(strtolower($image['name']), PATHINFO_EXTENSION);
+            $errors['image_file'] .= in_array($extension, FILE_EXTENSIONS) ? '' : 'The file extension is not allowed';
+
+            $errors['image_file'] .= $image['size'] > MAX_FILE_SIZE ? 'The image exceeds the maximum upload size' : '';
+
+            if($errors['image_file'] === '' && $errors['image_alt'] === ''){
+                $article['image_file'] = $image['name'];
+                $save_to = get_file_path($image['name'], UPLOAD_DIR);
             }
+
         }
     }
-    //Daten aus dem Formular auslesen
+    
     $article['title'] = filter_input(INPUT_POST, 'title');
     $article['summary'] = filter_input(INPUT_POST, 'summary');
     $article['content'] = filter_input(INPUT_POST, 'content');
@@ -92,73 +70,54 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $article['category_id'] = filter_input(INPUT_POST, 'category', FILTER_VALIDATE_INT);
     $article['published'] = filter_input(INPUT_POST, 'published', FILTER_VALIDATE_BOOLEAN) ? 1 : 0;
 
-    //HTML Code wird bereinigt
     $purifier = new HTMLPurifier();
-    //Es werden nur die in der set Methode genannten HTML-Tags zu gelassen
-    $purifier->config->set('HTML.Allowed', 'p,br,strong,em,a[href],i,u,ul,ol,li,img[src|alt]');
-    //Purifier wird auf den Content angewendet
+    $purifier->config->set('HTML.Allowed', 'p, br, string, em, a[href], i, u, ul, ol, li, img[src|alt]');
     $article['content'] = $purifier->purify($article['content']);
 
-    //Error Meldung erstellen und zusätzliche Validierung
-    $errors['title'] = is_text( $article['title'] ) ? '' : 'Title must be between 1 and 100 characters';
-    $errors['summary'] = is_text($article['summary'], 1, 200) ? '' : 'Summary must be between 1 and 200 characters';
-    $errors['content'] = is_text($article['content'], 1, 10000) ? '' : 'Content must be between 1 and 10.000 characters';
-    $errors['user'] = is_user_id($article['user_id'], $users) ? '' : 'User not found';
-    $errors['category'] = is_category_id($article['category_id'], $categories) ? '' : 'Category not found';
 
+
+    $errors['title'] = Validate::is_text($article['title']) ? '' : 'Title must be between 1 and 100 characters';
+    $errors['summary'] = Validate::is_text($article['summary'], 1 , 200) ? '' : 'Summary must be between 1 and 200 characters';
+    $errors['content'] = Validate::is_text($article['content'], 1 , 10000) ? '' : 'Content must be between 1 and 10.000 characters';
+    $errors['user_id'] = Validate::is_user_id($article['user_id'], $users) ? '' : 'User not found';
+    $errors['category'] = Validate::is_category_id($article['category_id'], $categories) ? '' : 'Category not found';
+    
     $problems = implode($errors);
 
-    if ( ! $problems ){
-        //bindings beinhaltet alle Variablen die der Funktion Statement::bindValue übergeben werden (oder auch Statement::execute als Array)
+    if(! $problems){
         $bindings = $article;
-        try {
-            //Transaktion starten
-            $pdo->beginTransaction();
-            //Wenn ein Bild hochgeladen wurde, wird es gespeichert
-            if( $save_to ) {
+        try{
+            if($save_to){
                 scale_and_copy($tmp_path, $save_to);
+                $image_id = $cms->getImage()->push($bindings);
+                $bindings['images_id'] = $image_id;
 
-                $sql = "INSERT INTO images (filename, alttext) VALUES (:filename, :alttext)";
-                $stmt = pdo_execute($pdo, $sql, ['filename' => $article['filename'], 'alttext' => $article['alttext'] ] );
-                //lastInsertId gibt die Id des zuletzt eingefügten Datensatzes zurück
-                $bindings['images_id'] = $pdo->lastInsertId();
             }
-            //Da ab hier die Bildtabelle aktualisiert wurde, werden die Bilddaten aus dem bindings Array entfernt.
-            //Für das INSERT (Anlegen eines neuen Datensatzes) wird die id automatich mit autoinkrement erstellt
-            //und muss deshlab hier aus den bindngs entfernt werden.
-            unset($bindings['filename'], $bindings['alttext'], $bindings['id']);
-            $sql = "INSERT INTO articles (title, summary, content, category_id, user_id, published, images_id)
-                    VALUES (:title, :summary, :content, :category_id, :user_id, :published, :images_id)";
-            //Block, wenn ein Artikel bearbeitet wurde
-            if ( $id ) {
-                // Wenn die ID vorhanden ist, wird ein Update durchgeführt und die id wird wieder in das bindings Array aufgenommen.
+            unset($bindings['image_file'], $bindings['image_alt'], $bindings['id']);
+
+            if($id){
                 $bindings['id'] = $id;
-                $sql = "UPDATE articles SET title = :title, summary = :summary, content = :content,
-                        category_id = :category_id, user_id = :user_id, published = :published, images_id = :images_id WHERE id = :id";
+                $cms->getArticle()->update($bindings);
             }
-            $stmt = pdo_execute( $pdo, $sql, $bindings );
-            //Transaktion abschließen
-            $pdo->commit();
-            redirect('articles.php', ['success' => 'article successfully saved' ] );
-        } catch ( PDOException $e ) {
-            // Wenn ein Fehler auftritt, wird die Transkation zurückgerollt und der Fehler ausgegeben
-            $pdo->rollBack();
+            else{
+               $is_pushed = $cms->getArticle()->push($bindings);
+            }
+            redirect('articles.php', ['success' => 'article successfully saved']);
+        }
+        catch(PDOException $e){
             $errors['issue'] = $e->getMessage();
         }
     }
 
+   
+
+
 }
-?>
 
-<?php include '../includes/header-admin.php'; ?>
+$data['article'] =  $article;
+$data['errors'] = $errors;
+$data['categories'] = $categories;
+$data['users'] = $users;
 
-<script>
-    tinymce.init({
-        selector: '#content',
-        menubar: false,
-        toolbar: 'bold italic underline link',
-        plugins: 'link',
-        link_title: false
-    })
-</script>
-<?php include '../includes/footer.php'; ?>
+echo $twig->render('admin/article.html', $data);
+

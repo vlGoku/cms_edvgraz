@@ -6,7 +6,7 @@
     <title><?= e( $title ?? '' ) ?></title>
     <meta name="description" content="<?= e( $description ?? '' ) ?>">
     <link rel="stylesheet" type="text/css" href="../css/output.css">
-    <script src="https://cdn.tiny.cloud/1/p180na65jcaeb816yyw0r7n6gu79hlvu0hihc4e3sdxu9qq7/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+    <script src="https://cdn.tiny.cloud/1/vl1rxv1051t1nrf4540q6qme1izoxy8zka0ugjt23vuzh7gr/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
 </head>
 <body>
 <header class="bg-white border-gray-200 dark:bg-gray-900 border-b-4">
@@ -31,22 +31,15 @@
                     class="font-medium flex flex-col p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 rtl:space-x-reverse md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
                     <li>
                           <a class="block py-2 px-3 text-white bg-blue-700 rounded hover:text-pink-600 md:bg-transparent md:text-blue-700 md:p-0 dark:text-white md:dark:text-blue-500"
-                             href="articles.php">
-                             Article
+                            href="../admin/articles.php">
+                            Articles
                           </a>
-                      </li>
-                      <li>
-                          <a class="block py-2 px-3 text-white bg-blue-700 rounded hover:text-pink-600 md:bg-transparent md:text-blue-700 md:p-0 dark:text-white md:dark:text-blue-500"
-                             href="categories.php">
-                             Categories
-                          </a>
-                      </li>
+                    </li>
                     <li>
-                        <a href="search.php">
-                            <object class="pointer-events-none" data="../img/material-search.svg" type="image/svg+xml">
-                                <img src="../img/material-search.png" alt="Search">
-                            </object>
-                        </a>
+                          <a class="block py-2 px-3 text-white bg-blue-700 rounded hover:text-pink-600 md:bg-transparent md:text-blue-700 md:p-0 dark:text-white md:dark:text-blue-500"
+                            href="../admin/categories.php">
+                            Categories
+                          </a>
                     </li>
                 </ul>
             </div>
