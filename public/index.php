@@ -1,5 +1,5 @@
 <?php
-require '../src/bootstrap.php';
+require dirname(__DIR__) . '/src/bootstrap.php';
 
 $data['articles'] = $cms->getArticle()->getAll(null, true, null, 6);
 $data['navigation'] = $cms->getCategory()->fetchNavigation();

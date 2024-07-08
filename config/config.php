@@ -1,6 +1,6 @@
 <?php
 const DEV_MODE = true;
-const DOC_ROOT = '/cms-system/public/';
+const DOC_ROOT = '/public/';
 const ROOT_FOLDER = '/public/';
 //Database connection
 $type = 'mysql';

@@ -2,7 +2,7 @@
 
 namespace EdvGraz\CMS;
 
-class CMS {
+class Cms {
     protected Database $db;
     protected Article $article;
     protected Category $category;

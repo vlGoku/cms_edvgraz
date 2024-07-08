@@ -28,9 +28,5 @@ if($is_delete === 1) {
 ?>
 
 <?php include '../includes/header-admin.php'; ?>
-<main class="container mx-auto flex justify-center flex-row items-center">
-    <h2 class="text-xl text-blue-500 mb-8">Are you sure you want to delete this article? </h3>
-    <button class="text-white bg-red-500 p-3 rounded-md hover:bg-pink-600"><a href="article-delete.php?delete=1&id=<?= $article_id ?>">Yes</button>
-    <button class="text-white bg-blue-500 p-3 rounded-md hover:bg-pink-600"><a href="articles.php">No</a></button>
-</main>
+
 <?php include '../includes/footer.php'; ?>
