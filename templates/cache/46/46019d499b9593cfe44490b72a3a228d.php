@@ -101,71 +101,95 @@ class __TwigTemplate_038577526ebc6eed63896949144532a4 extends Template
             ";
         }
         // line 17
+        yield "      
+            ";
+        // line 18
+        if ((CoreExtension::getAttribute($this->env, $this->source, ($context["session"] ?? null), "id", [], "any", false, false, false, 18) == CoreExtension::getAttribute($this->env, $this->source, ($context["user"] ?? null), "id", [], "any", false, false, false, 18))) {
+            yield " 
+             <div class=\"flex justify-center\">
+                <a class=\"text-white bg-pink-600 hover:bg-blue-600 p-2 rounded-md m-2\" href=\"";
+            // line 20
+            yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(($context["doc_root"] ?? null), "html", null, true);
+            yield "edit-user-profile.php\">Edit Profile</a>
+                <a class=\"text-white bg-pink-600 hover:bg-blue-600 p-2 rounded-md m-2\" href=\"";
+            // line 21
+            yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(($context["doc_root"] ?? null), "html", null, true);
+            yield "edit-article.php\">Add Article</a>
+                <a class=\"text-white bg-pink-600 hover:bg-blue-600 p-2 rounded-md m-2\" href=\"";
+            // line 22
+            yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(($context["doc_root"] ?? null), "html", null, true);
+            yield "edit-profile-pic\">Add Profile Picture</a>
+            </div>
+            ";
+        }
+        // line 25
         yield "        </section>
         <section class=\"flex flex-wrap p-8\">
             ";
-        // line 19
+        // line 27
         $context['_parent'] = $context;
         $context['_seq'] = CoreExtension::ensureTraversable(($context["articles"] ?? null));
         foreach ($context['_seq'] as $context["_key"] => $context["article"]) {
-            // line 20
+            // line 28
             yield "                <article class=\"w-full p-4 flex justify-between flex-col sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/6 mb-4\">
                     <a href=\"";
-            // line 21
+            // line 29
             yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(($context["doc_root"] ?? null), "html", null, true);
             yield "article.php?id=";
-            yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, $context["article"], "id", [], "any", false, false, false, 21), "html", null, true);
+            yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, $context["article"], "id", [], "any", false, false, false, 29), "html", null, true);
             yield "\">
                         ";
-            // line 22
-            if (CoreExtension::getAttribute($this->env, $this->source, $context["article"], "image_file", [], "any", false, false, false, 22)) {
-                // line 23
+            // line 30
+            if (CoreExtension::getAttribute($this->env, $this->source, $context["article"], "image_file", [], "any", false, false, false, 30)) {
+                // line 31
                 yield "                        <img src=\"";
                 yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(($context["doc_root"] ?? null), "html", null, true);
                 yield "uploads/";
-                yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, $context["article"], "image_file", [], "any", false, false, false, 23), "html", null, true);
+                yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, $context["article"], "image_file", [], "any", false, false, false, 31), "html", null, true);
                 yield "\"
                             alt=\"";
-                // line 24
-                yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, $context["article"], "alt_text", [], "any", false, false, false, 24), "html", null, true);
+                // line 32
+                yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, $context["article"], "alt_text", [], "any", false, false, false, 32), "html", null, true);
                 yield "\">
                         ";
             } else {
-                // line 26
+                // line 34
                 yield "                        <img alt=\"No Image\" src=\"";
                 yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(($context["doc_root"] ?? null), "html", null, true);
                 yield "/uploads/placeholder.jpg\">
                         ";
             }
-            // line 28
-            yield "                        <h2 class=\"text-blue-500 text-2xl pt-3 pb-1.5\">";
-            yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, $context["article"], "title", [], "any", false, false, false, 28), "html", null, true);
+            // line 36
+            yield " 
+                        <h2 class=\"text-blue-500 text-2xl pt-3 pb-1.5\">";
+            // line 37
+            yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, $context["article"], "title", [], "any", false, false, false, 37), "html", null, true);
             yield "</h2>
                         <p class=\"text-gray-500 pb-2.5\">";
-            // line 29
-            yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, $context["article"], "summary", [], "any", false, false, false, 29), "html", null, true);
+            // line 38
+            yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, $context["article"], "summary", [], "any", false, false, false, 38), "html", null, true);
             yield "</p>
                     </a>
                     <p class=\"credit text-xs\">
                         Posted in <a class=\"text-pink-400\" href=\"";
-            // line 32
+            // line 41
             yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(($context["doc_root"] ?? null), "html", null, true);
             yield "category.php?id=";
-            yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, $context["article"], "category_id", [], "any", false, false, false, 32), "html", null, true);
+            yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, $context["article"], "category_id", [], "any", false, false, false, 41), "html", null, true);
             yield "\">
                             ";
-            // line 33
-            yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, $context["article"], "category", [], "any", false, false, false, 33), "html", null, true);
+            // line 42
+            yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, $context["article"], "category", [], "any", false, false, false, 42), "html", null, true);
             yield "</a>
                         by <a class=\"text-pink-400\" href=\"";
-            // line 34
+            // line 43
             yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(($context["doc_root"] ?? null), "html", null, true);
             yield "user.php?id=";
-            yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, $context["article"], "user_id", [], "any", false, false, false, 34), "html", null, true);
+            yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, $context["article"], "user_id", [], "any", false, false, false, 43), "html", null, true);
             yield "\">
                             ";
-            // line 35
-            yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, $context["article"], "author", [], "any", false, false, false, 35), "html", null, true);
+            // line 44
+            yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, $context["article"], "author", [], "any", false, false, false, 44), "html", null, true);
             yield " </a>
                     </p>
                 </article>
@@ -174,7 +198,21 @@ class __TwigTemplate_038577526ebc6eed63896949144532a4 extends Template
         $_parent = $context['_parent'];
         unset($context['_seq'], $context['_iterated'], $context['_key'], $context['article'], $context['_parent'], $context['loop']);
         $context = array_intersect_key($context, $_parent) + $_parent;
-        // line 39
+        // line 48
+        yield "            ";
+        if ((CoreExtension::getAttribute($this->env, $this->source, ($context["session"] ?? null), "id", [], "any", false, false, false, 48) == CoreExtension::getAttribute($this->env, $this->source, ($context["article"] ?? null), "user_id", [], "any", false, false, false, 48))) {
+            // line 49
+            yield "            <p class=\"edit mt4\">
+                <a class=\"text-white bg-pink-600 hover:bg-blue-600 p-2 rounded-md mt-2\" href=\"";
+            // line 50
+            yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(($context["doc_root"] ?? null), "html", null, true);
+            yield "edit-article.php?id=";
+            yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, ($context["article"] ?? null), "id", [], "any", false, false, false, 50), "html", null, true);
+            yield "\">Edit</a>
+            </p>
+            ";
+        }
+        // line 53
         yield "        </section>
     </main>
 
@@ -203,7 +241,7 @@ class __TwigTemplate_038577526ebc6eed63896949144532a4 extends Template
      */
     public function getDebugInfo()
     {
-        return array (  178 => 39,  168 => 35,  162 => 34,  158 => 33,  152 => 32,  146 => 29,  141 => 28,  135 => 26,  130 => 24,  123 => 23,  121 => 22,  115 => 21,  112 => 20,  108 => 19,  104 => 17,  98 => 15,  90 => 13,  88 => 12,  84 => 11,  78 => 10,  73 => 7,  69 => 6,  59 => 4,  49 => 3,  38 => 1,);
+        return array (  216 => 53,  208 => 50,  205 => 49,  202 => 48,  192 => 44,  186 => 43,  182 => 42,  176 => 41,  170 => 38,  166 => 37,  163 => 36,  157 => 34,  152 => 32,  145 => 31,  143 => 30,  137 => 29,  134 => 28,  130 => 27,  126 => 25,  120 => 22,  116 => 21,  112 => 20,  107 => 18,  104 => 17,  98 => 15,  90 => 13,  88 => 12,  84 => 11,  78 => 10,  73 => 7,  69 => 6,  59 => 4,  49 => 3,  38 => 1,);
     }
 
     public function getSourceContext()
@@ -224,6 +262,14 @@ class __TwigTemplate_038577526ebc6eed63896949144532a4 extends Template
             {% else %}
                 <img alt=\"No Image\" src=\"{{doc_root}}/uploads/placeholder.jpg\">
             {% endif %}
+      
+            {% if session.id == user.id %} 
+             <div class=\"flex justify-center\">
+                <a class=\"text-white bg-pink-600 hover:bg-blue-600 p-2 rounded-md m-2\" href=\"{{doc_root}}edit-user-profile.php\">Edit Profile</a>
+                <a class=\"text-white bg-pink-600 hover:bg-blue-600 p-2 rounded-md m-2\" href=\"{{doc_root}}edit-article.php\">Add Article</a>
+                <a class=\"text-white bg-pink-600 hover:bg-blue-600 p-2 rounded-md m-2\" href=\"{{doc_root}}edit-profile-pic\">Add Profile Picture</a>
+            </div>
+            {% endif %}
         </section>
         <section class=\"flex flex-wrap p-8\">
             {% for article in articles %}
@@ -235,6 +281,7 @@ class __TwigTemplate_038577526ebc6eed63896949144532a4 extends Template
                         {% else %}
                         <img alt=\"No Image\" src=\"{{doc_root}}/uploads/placeholder.jpg\">
                         {% endif %}
+ 
                         <h2 class=\"text-blue-500 text-2xl pt-3 pb-1.5\">{{article.title}}</h2>
                         <p class=\"text-gray-500 pb-2.5\">{{article.summary}}</p>
                     </a>
@@ -246,6 +293,11 @@ class __TwigTemplate_038577526ebc6eed63896949144532a4 extends Template
                     </p>
                 </article>
             {% endfor %}
+            {% if (session.id == article.user_id) %}
+            <p class=\"edit mt4\">
+                <a class=\"text-white bg-pink-600 hover:bg-blue-600 p-2 rounded-md mt-2\" href=\"{{doc_root}}edit-article.php?id={{article.id}}\">Edit</a>
+            </p>
+            {% endif %}
         </section>
     </main>
 

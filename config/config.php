@@ -2,6 +2,7 @@
 const DEV_MODE = true;
 const DOC_ROOT = '/public/';
 const ROOT_FOLDER = '/public/';
+const DOMAIN = 'http://localhost:';
 //Database connection
 $type = 'mysql';
 $host = 'localhost';
@@ -20,9 +21,9 @@ define ("UPLOAD_DIR", dirname(__DIR__, 1) . DIRECTORY_SEPARATOR . ROOT_FOLDER . 
 $mail_config = [
     'host' => 'smtp-mail.outlook.com',
     'port' => 587,
-    'username' => 'marko21ps4@outlook.de',
-    'password' => 'Okram109',
+    'username' => 'meine@mail.net',
+    'password' => 'Mein Passwort',
     'sec' => 'tls',
-    'admin_mail' => 'marko21ps4@outlook.de',
+    'admin_mail' => 'meine@mail.net',
     'debug' => (DEV_MODE ? 2 : 0)
 ];

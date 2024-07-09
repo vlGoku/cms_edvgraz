@@ -28,6 +28,7 @@ class Article{
 
         return $this->db->sql_execute($sql,['id' => $id])->fetchAll();
     }
+
     public function fetchAll(int $cat_id = null, bool $published = true, int $user_id = null, int $limit = 1000): array {
         $sql = "SELECT a.id, a.title, a.summary, a.category_id, a.user_id, a.published,a.created, c.name AS category,
                 CONCAT(u.forename, ' ', u.surname) as author,
@@ -44,6 +45,7 @@ class Article{
         $sql .= " ORDER BY a.id DESC LIMIT :limit;";
         return $this->db->sql_execute($sql, ['cat_id' => $cat_id, 'user_id' => $user_id, 'limit' => $limit])->fetchAll();
     }
+
     public function fetchAllbyUser(int $user_id): array {
         $sql = "SELECT a.id, a.title, a.summary, a.category_id, a.user_id, 
                        c.name as category, 
@@ -74,6 +76,7 @@ class Article{
             return false;
         }
     }
+
     public function push(array $data):bool {
         try{
             $sql = "INSERT INTO articles (title, summary, content, category_id, user_id, published, images_id)
@@ -138,5 +141,16 @@ class Article{
             'offset' =>  (int) $offset
         ];
         return $this->db->sql_execute($sql, $bindings )->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function count ( string $search = ''): int {
+        $sql = "SELECT COUNT(id) FROM articles WHERE published = 1;";
+        if( $search ) {
+            $sql = "SELECT COUNT(id) FROM articles WHERE published = 1 AND (title LIKE :search OR summary LIKE :search OR content LIKE :seach);";
+
+            return $this->db->sql_execute($sql, ['search' => "%$search%"] )->fetchColumn();
+        }
+
+        return $this->db->sql_execute($sql)->fetchColumn();
     }
 }

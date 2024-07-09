@@ -2,6 +2,7 @@
 require '../../src/bootstrap.php';
 use EdvGraz\Validation\Validate;
 
+is_admin($session->role);
 
 $id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT) ?? '';
 $tmp_path = $_FILES['image_file']['tmp_name'] ?? '';

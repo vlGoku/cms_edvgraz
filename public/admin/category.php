@@ -3,6 +3,8 @@ require '../../src/bootstrap.php';
 
 use EdvGraz\Validation\Validate;
 
+is_admin($session->role);
+
 $id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT) ?? null;
 $errors = [
     'issue' => '',

@@ -9,7 +9,6 @@ $data['user'] = $cms->getUser()->fetch($user_id)[0];
 if(!$data['user']){
     include 'page_not_found.php';
 }
-
 $data['articles'] = $cms->getArticle()->fetchAllbyUser($user_id);
 
 $sql            = "SELECT id, name FROM category WHERE navigation = 1";
